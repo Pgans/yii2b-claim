@@ -39,7 +39,7 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'Rep', 'url' => ['/rep/rep']],
+            ['label' => 'RepSQL', 'url' => ['/rep1/rep']],
             ['label' => 'YooCalim', 'url' => ['/registerdata/index']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (

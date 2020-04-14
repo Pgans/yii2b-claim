@@ -2,7 +2,7 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=mdevices_a',
+    'dsn' => 'mysql:host=localhost;dbname=eclaimdb',
     'username' => 'root',
     'password' => '1234',
     'charset' => 'utf8',

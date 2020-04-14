@@ -3,6 +3,7 @@ use kartik\grid\GridView;
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use yii\helpers\Url;
+use kartik\editable\Editable;
 
 
 $this->title = 'rep E-Claim';
@@ -17,7 +18,7 @@ $this->title = 'rep E-Claim';
 
                 <?= Html::beginForm(); ?>
 
-                <label for="pwd">RepClaim1 : &nbsp;&nbsp; </label>
+                <label for="pwd">รหัสRep : &nbsp;&nbsp; </label>
                 <input type="text"  name="rep1"  placeholder="">
             
                 <input type="text"  name="rep2"  placeholder="">
@@ -32,7 +33,7 @@ $this->title = 'rep E-Claim';
         </div>
     </div>
 </div>
-630100016' OR r.REP = '630100021'
+630100016 OR r.REP = 630100021
 <?php
 
 echo GridView::widget([
@@ -46,44 +47,50 @@ echo GridView::widget([
             'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
                     [
+                       // 'class' => 'kartik\grid\EditableColumn',
                         'attribute' => 'REP',
-                       // 'header' => 'rep',
+                        'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
                     ],
                     [
                         'attribute' => 'HN',
-                       // 'header' => 'เดือน',
+                       'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
+                       
                     ],
-                    [
-                        'attribute' => 'PID',
-                       // 'header' => 'เดือน',
-                    ],
+                    
                     [
                         'attribute' => 'DATEADM',
-                       // 'header' => 'เดือน',
+                    'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
                     ],
                     [
                         'attribute' => 'FULLNAME',
-                       // 'header' => 'เดือน',
+                        'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
+                        
+
                     ],
                     [
                         'attribute' => 'MAININSCL',
-                       // 'header' => 'เดือน',
+                       'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
+                       'pageSummary'=> 'รวม',
                     ],
                     [
                        // 'class' => 'kartik\grid\EditableColumn',
                         'attribute' => 'SUMS_SERVICEITEM',
+                        'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
                         'pageSummary' => true,
                     ],
-                    // [
-                    //     'attribute' => 'จำนวนเด็กคลอด',
-                    //     'format' => 'raw',
-                    //     'value' =>function($model) {
-                    //         $mm = $model['MM'];
-                    //         $amount = $model['AMOUNT'];
-                    //         return Html::a(Html::encode($amount), ['lr/outcome_list','MM' => $mm],['target'=>'_blank']);
-                    //     }
-                    //         ],
-                       ]
+        //             [
+        //       'class' => 'yii\grid\ActionColumn',
+        //       'header'=>'Actions',
+        //       'options'=>['style'=>'width:150px;'],
+        //       'buttonOptions'=>['class'=>'btn btn-default'],
+        //       'template'=>'<div class="btn-group btn-group-sm text-center" role="group">{print} {view} {update} {delete} </div>',
+        //       'buttons'=>[
+        //         'print'=>function($url,$model){
+        //           return Html::a('<i class="glyphicon glyphicon-print"></i>',['pdf/url'],['class'=>'btn-pdfprint btn btn-default','data-pjax'=>'0']);
+        //         }
+        //       ]
+        //     ],
+         ],
                   ]);
                     ?>
                     

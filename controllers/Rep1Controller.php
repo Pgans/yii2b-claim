@@ -5,7 +5,7 @@ use yii;
 use app\models\RepSearch;
 
 
-class RepController extends \yii\web\Controller
+class Rep1Controller extends \yii\web\Controller
 {
     public function actionIndex()
     {
@@ -32,7 +32,7 @@ class RepController extends \yii\web\Controller
        $dataProvider = new \yii\data\ArrayDataProvider([
            'allModels' => $rawData,
            'pagination' => [
-            'pageSize' => 3  0,
+            'pageSize' => 50,
             ],
        ]);
        return $this->render('rep', [

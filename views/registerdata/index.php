@@ -28,9 +28,9 @@ use kartik\grid\GridView;
             //'ECLAIM_NO',
             //'HCODE',
             [
-                'class' => 'kartik\grid\EditableColumn',
+                'class'=>'kartik\grid\EditableColumn',
                 'attribute' => 'REP',
-                ],
+             ],
            // 'REP',
             'HN',
            // 'AN',
