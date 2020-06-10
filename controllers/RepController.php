@@ -5,7 +5,7 @@ use yii;
 use app\models\RepSearch;
 
 
-class Rep1Controller extends \yii\web\Controller
+class RepController extends \yii\web\Controller
 {
     public function actionIndex()
     {
@@ -17,12 +17,21 @@ class Rep1Controller extends \yii\web\Controller
             $rep1 = isset($data['rep1']) ? $data['rep1'] : '';
             $rep2 = isset($data['rep2']) ? $data['rep2'] : '';
             $rep3 = isset($data['rep3']) ? $data['rep3'] : '';
+            $rep4 = isset($data['rep4']) ? $data['rep4'] : '';
+            $rep5 = isset($data['rep5']) ? $data['rep5'] : '';
+            $rep6 = isset($data['rep6']) ? $data['rep6'] : '';
+            $rep7 = isset($data['rep7']) ? $data['rep7'] : '';
+            $rep8 = isset($data['rep8']) ? $data['rep8'] : '';
+            $rep9 = isset($data['rep9']) ? $data['rep9'] : '';
             //$date2 = isset($data['date2']) ? $data['date2'] : '';
         
-        $sql = "SELECT r.REP, r.HN, r.PID, r.DATEADM ,CONCAT(r.TITLES,'',r.FNAME,'   ',r.LNAME) AS FULLNAME, r.MAININSCL,
-        REPLACE(r.SUMS_SERVICEITEM,',','') as SUMS_SERVICEITEM
+        $sql = "SELECT r.REP, r.HN, r.PID, r.DATEADM ,CONCAT(SUBSTR(r.TITLES,2),'',r.FNAME,' ',r.LNAME) AS FULLNAME, r.MAININSCL,
+        REPLACE(r.SUMS_SERVICEITEM,',','') as SUMS_SERVICEITEM,s.SUB_FUND,s.TOTL_AMT
         FROM m_registerdata r
-        WHERE (r.REP = '$rep1' OR r.REP = '$rep2' OR r.REP = '$rep3') ";
+        INNER JOIN m_sum_subfund s ON r.tran_id = s.tran_id AND s.ITEM_SOURCE = 'M_REGISTER'
+
+        WHERE (r.REP = '$rep1' OR r.REP = '$rep2' OR r.REP = '$rep3' OR r.REP = '$rep3'OR r.REP = '$rep4'
+        OR r.REP = '$rep5'OR r.REP = '$rep6' OR r.REP = '$rep7' OR r.REP = '$rep8' OR r.REP = '$rep9') ";
         $rawData = \yii::$app->db->createCommand($sql)->queryAll();
        try {
            $rawData = \Yii::$app->db->createCommand($sql)->queryAll();
@@ -32,7 +41,7 @@ class Rep1Controller extends \yii\web\Controller
        $dataProvider = new \yii\data\ArrayDataProvider([
            'allModels' => $rawData,
            'pagination' => [
-            'pageSize' => 50,
+            'pageSize' => 200,
             ],
        ]);
        return $this->render('rep', [

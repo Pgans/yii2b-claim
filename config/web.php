@@ -18,9 +18,6 @@ $config = [
         'huay' => [
             'class' => 'app\module\huay\Module',
         ],
-        'rep' => [
-            'class' => 'app\modules\rep\rep',
-        ],
         ],
     'components' => [
         'request' => [
