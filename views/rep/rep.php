@@ -4,6 +4,10 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use yii\helpers\Url;
 use kartik\editable\Editable;
+use yii\bootstrap\Modal;
+use yii\widgets\Pjax;
+
+
 
 
 $this->title = 'rep E-Claim';
@@ -13,7 +17,7 @@ $this->title = 'rep E-Claim';
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-info">
-            <div class="panel-heading"><i class="fa fa-search"></i> ค้นหาRep</div>
+            <div class="panel-heading"><i class="fa fa-search"></i> ค้นหาRep ตัวอย่างเช่น 611100035</div>
             <div class="panel-body">
 
                 <?= Html::beginForm(); ?>
@@ -36,9 +40,21 @@ $this->title = 'rep E-Claim';
         </div>
     </div>
 </div>
-
+<!-- <p>
+    <?= Html::button('<i class="glyphicon glyphicon-plus"></i>แจ้งส่งซ่อมคอมและโสตทัศนศึกษา', ['value'=>Url::to(['rep/rep2']), 'class' => 'btn btn-success btn-lg','id'=>'modalButton']); ?>
+        <?= Html::a(Yii::t('app','เมื่อบันทึกระบบจะส่งเข้าไลน์ถึงผู้รับผิดชอบทันที....ขอบคุณครับ'))?>
+    </p> -->
+        <?php Modal::begin([
+        'id' => 'modal',
+        'header' => '<h4><a color-blue>CREATE JOBCOM</a></h4>',
+        'size'=>'modal-lg',
+        'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">ปิด</a>',
+        ]);
+        echo "<div id='modalContent'></div>";
+        Modal::end();
+        ?>
+    <?php Pjax::begin(); ?>
 <?php
-
 echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -48,7 +64,8 @@ echo GridView::widget([
             ],
             'showPageSummary' => true,
             'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
+                   // ['class' => 'yii\grid\SerialColumn'],
+                    ['class' => 'kartik\grid\SerialColumn'],
                     [
                         //'class' => 'kartik\grid\EditableColumn',
                         'attribute' => 'REP',
@@ -106,8 +123,17 @@ echo GridView::widget([
                     'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
                     'pageSummary'=> true,
                     ],
-                       ]
-                  ]);
-                    ?>
+                    ]
+                    ]);
                     
-                    <div class="alert alert-danger"><?=$sql?> </div>
+                      ?>
+                       <?php Pjax::end() ?> 
+             <input class="btn btn-primary" name="btnButton" type="button" value="Print Results" onClick="JavaScript:window.print();">
+              <?php echo Html::a('ผลงานClaim-ตัดยอดชดเชย', ['rep/rep2'], ['class' => 'btn btn-success', 'style' => 'margin-left:5px','target'=>'_blank']); ?> 
+            
+             
+             </div>
+            
+            </div>
+                    
+                   
