@@ -40,7 +40,7 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'Rep', 'url' => ['/rep/rep']],
-            ['label' => 'YooCalim', 'url' => ['/registerdata/index']],
+            ['label' => 'IPD_RW', 'url' => ['/rep/adjrw']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
