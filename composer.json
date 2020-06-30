@@ -26,8 +26,8 @@
         "kartik-v/yii2-widget-activeform": "@dev",
         "kartik-v/yii2-widgets": "^1.0@dev",
         "yiisoft/yii2-jui": "^2.0@dev",
-        "kartik-v/yii2-grid": "@dev"
-
+        "miloschuman/yii2-highcharts-widget": "dev-master"
+       
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

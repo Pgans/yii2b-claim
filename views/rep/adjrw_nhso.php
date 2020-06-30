@@ -76,8 +76,7 @@ echo GridView::widget([
                       ?>
                        <input class="btn btn-primary" name="btnButton" type="button" value="Print Results" onClick="JavaScript:window.print();">
                        <?php echo Html::a('Adjrwไตรมาส1', ['rep/trimas'], ['class' => 'btn btn-success', 'style' => 'margin-left:5px','target'=>'_blank']); ?>
-                       <!-- <?php echo Html::a('Adjrwไตรมาส2', ['rep/trimas2'], ['class' => 'btn btn-info', 'style' => 'margin-left:5px','target'=>'_blank']); ?> 
-                       <?php echo Html::a('Adjrwไตรมาส3', ['rep/trimas3'], ['class' => 'btn btn-warning', 'style' => 'margin-left:5px','target'=>'_blank']); ?>   -->
+                       <?php echo Html::a('ผลงานClaim-Adjrw_nhso', ['rep/fiscal'], ['class' => 'btn btn-info', 'style' => 'margin-left:5px','target'=>'_blank']); ?> 
                     </div>
                     
                    

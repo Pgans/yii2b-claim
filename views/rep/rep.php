@@ -131,9 +131,7 @@ echo GridView::widget([
              <input class="btn btn-primary" name="btnButton" type="button" value="Print Results" onClick="JavaScript:window.print();">
               <?php echo Html::a('ผลงานClaim-ตัดยอดชดเชย', ['rep/rep2'], ['class' => 'btn btn-success', 'style' => 'margin-left:5px','target'=>'_blank']); ?> 
             
-             
-             </div>
-            
+              </div>
             </div>
                     
                    

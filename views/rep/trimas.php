@@ -1,10 +1,10 @@
 <?php
-use kartik\grid\GridView;
-use yii\helpers\Html;
-use kartik\widgets\ActiveForm;
 use yii\helpers\Url;
-use kartik\editable\Editable;
-
+use yii\widgets\Pjax;
+use \miloschuman\highcharts\Highcharts;
+use yii\web\JsExpression;
+use kartik\grid\GridView;
+use kartik\export\ExportMenu;
 
 
 
@@ -12,215 +12,286 @@ $this->title = 'ไตรมาส1';
 //$this->params['breadcrumbs'][] = ['label' => 'รายงาน', 'url' => ['rep/index']];
 //$this->params['breadcrumbs'][] = 'รายงานข้อมูลE-Claim แยกตามREP';
 ?>
-  <div class="col-md-6">
+ 
+             <div class="col-md-6">
                     <div class="panel panel-info">
                         <div class="panel-heading"><i class="glyphicon glyphicon-user"></i>รายงานข้อมูลE-Claim ผู้ป่วยใน ADJRW จากสปสช.ไตรมาส1</<i></div>
                         <div class="panel-body"> 
-                            <div>
-<?php
-echo GridView::widget([
-        'dataProvider' => $dataProvider1,
-        'filterModel' => $searchModel,
-        'panel' => [
-            'before'=>'<a>รายงานข้อมูลE-Claim ผู้ป่วยใน ADJRW จากสปสช.  ประจำเดือน</a> '.date('Y-m'),
-            'after'=>'<a>ประมวลผลปีงบประมาณ2563 จาก 1 ตุลาคม 2562  ถึง  1 ธันวาคม 2563</a>',
-            ],
-            'showPageSummary' => true,
-            'columns' => [
-                   // ['class' => 'yii\grid\SerialColumn'],
-                    ['class' => 'kartik\grid\SerialColumn'],
-                //     [
-                //         'attribute' => 'HCODE',
-                //         'label'=>'รหัส รพ.',
-                //         'headerOptions'=>[ 'style'=>'background-color:#08EC54'] ,
-                //        'format'=>'raw',
-                //        'value' => function ($model, $key, $index, $widget) {
-                //         return "<font  color='2E86C1'>" . $model['HCODE'] . "</font>"; 
-                // },       
-                //     ],
-                    [
-                        'attribute' => 'NAME',
-                        'label'=>'สิทธิการพยาบาล',
-                       'headerOptions'=>[ 'style'=>'background-color:#08EC54'] ,
-                       
-                    ],
-                    
-                    [
-                        'attribute' => 'MAININSCL',
-                        'label'=>'รหัสสิทธิ์',
-                    'headerOptions'=>[ 'style'=>'background-color:#08EC54'] ,
-                    ],
-                    [
-                        'attribute' => 'SUB_FUND',
-                        'label'=>'กองทุนย่อย',
-                       'headerOptions'=>[ 'style'=>'background-color:#08EC54'] ,
-                       'format'=>'raw',
-                        'value' => function ($model, $key, $index, $widget) {
-                            return "<font  color='FF9C33'>" . $model['SUB_FUND'] . "</font>"; 
-                    }, 
-                       'pageSummary'=> 'รวม',
-                    ],
-                    [
-                       // 'class' => 'kartik\grid\EditableColumn',
-                        'attribute' => 'AMOUNT',
-                        'label'=>'จำนวน(ราย)',
-                        'format'=>'raw',
-                        'headerOptions'=>[ 'style'=>'background-color:#08EC54'],
-                        'pageSummary' => true,
-                    ],//FF9C33  42E908  
-                     [
-                         'attribute' => 'ADJRW',
-                         'format'=>'raw',
-                         'headerOptions'=>['style'=>'background-color:#08EC54'],
-                         'format'=>['decimal', 4],
-                         'pageSummary'=> true,
-                     ],
-                    ]
+                            <div>   
+                 <?php
+                    echo Highcharts::widget([
+                        'options' => [
+                            'title' => ['text' => 'จำนวนเคลมและค่าAdjrw ไตรมาส1'],
+                            'xAxis' => [
+                                'categories' => $name
+                            ],
+                            'yAxis' => [
+                                'title' => ['text' => 'จำนวน(คน)']
+                            ],
+                            'series' => [
+                                [
+                                    'type' => 'column',
+                                    'name' => 'ผลรวมadjrw',
+                                    'data' =>$adjrw,
+                                ],
+                                [
+                                    'type' => 'column',
+                                    'name' => 'จำนวน(visits)',
+                                    'data' =>$amount,
+                                ]
+                            ]
+                        ]
                     ]);
-                      ?>       
-    </div>   
-    </div>
-    </div>   
-    </div>
-    <div class="col-md-6">
+                    ?>
+                </div>
+    
+                             <div>
+                                <?php
+                                //use yii\grid\GridView;
+
+                                echo GridView::widget([
+                                    'dataProvider' => $t1dataProvider,
+                                    'responsive' => true,
+                                    'hover' => true,
+                                    'panel' => [
+                                        'before' => ' ',
+                                        'after'=>'<a style="color:#ff6c00">
+                                       
+                                        </a>' 
+                                        ],
+                                        'showPageSummary' => true,
+                                    'pjax' => true,
+                                    'pjaxSettings' => [
+                                        'neverTimeout' => true,
+                                    ],
+                                    'columns' => [
+                                        ['class' => 'yii\grid\SerialColumn'],
+                                        
+                                        [
+                                            'label' => 'สิทธิการพยาบาล',
+                                            'attribute' => 'NAME',
+                                            'headerOptions'=>['style'=>'background-color:#FADBD8'],
+                                            'pageSummary'=> 'รวม',
+                                        ],
+                                        [
+                                            'label' => 'กองทุนย่อย',
+                                            'attribute' => 'SUB_FUND',
+                                            //'format' => ['decimal', 0],
+                                            'headerOptions'=>['style'=>'background-color:#FADBD8'],
+                                            //'pageSummary'=> true,
+                                        ],
+                                        
+                                        [
+                                            'label' => 'จำนวนเคลม',
+                                            'attribute' => 'AMOUNT',
+                                            'format' => ['decimal', 0],
+                                            'headerOptions'=>['style'=>'background-color:#FADBD8'],
+                                            'pageSummary'=> true,
+                                        ],
+                                        [
+                                            'label' => 'ADJRW',
+                                            'attribute' => 'ADJRW',
+                                            'headerOptions'=>['style'=>'background-color:#FADBD8'],
+                                             'format'=>['decimal', 4],
+                                             'pageSummary'=> true,
+                                        ],
+
+                                    ],
+                                ]);
+                                ?>
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
                     <div class="panel panel-info">
-                        <div class="panel-heading"><i class="glyphicon glyphicon-user"></i>รายงานข้อมูลE-Claim ผู้ป่วยใน ADJRW จากสปสช. ไตรมาส2</<i></div>
+                        <div class="panel-heading"><i class="glyphicon glyphicon-user"></i>รายงานข้อมูลE-Claim ผู้ป่วยใน ADJRW จากสปสช.ไตรมาส2</<i></div>
                         <div class="panel-body"> 
                             <div>   
-<?php
-echo GridView::widget([
-        'dataProvider' => $dataProvider2,
-        'filterModel' => $searchModel,
-        'panel' => [
-            'before'=>'<a>รายงานข้อมูลE-Claim ผู้ป่วยใน ADJRW จากสปสช.  ประจำเดือน</a> '.date('Y-m'),
-            'after'=>'<a>ประมวลผลปีงบประมาณ2563 จาก 1 กุมภาพันธ์ 2563  ถึง  31 พฤษภาคม 2563</a>',
-            ],
-            'showPageSummary' => true,
-            'columns' => [
-                   // ['class' => 'yii\grid\SerialColumn'],
-                    ['class' => 'kartik\grid\SerialColumn'],
-                //     [
-                //         'attribute' => 'HCODE',
-                //         'label'=>'รหัส รพ.',
-                //         'headerOptions'=>[ 'style'=>'background-color:#85C1E9'] ,
-                //        'format'=>'raw',
-                //        'value' => function ($model, $key, $index, $widget) {
-                //         return "<font  color='2E86C1'>" . $model['HCODE'] . "</font>"; 
-                // },       
-                //     ],
-                    [
-                        'attribute' => 'NAME',
-                        'label'=>'สิทธิการพยาบาล',
-                       'headerOptions'=>[ 'style'=>'background-color:#85C1E9'] ,
-                       
-                    ],
-                    
-                    [
-                        'attribute' => 'MAININSCL',
-                        'label'=>'รหัสสิทธิ์',
-                    'headerOptions'=>[ 'style'=>'background-color:#85C1E9'] ,
-                    ],
-                    [
-                        'attribute' => 'SUB_FUND',
-                        'label'=>'กองทุนย่อย',
-                       'headerOptions'=>[ 'style'=>'background-color:#85C1E9'] ,
-                       'format'=>'raw',
-                        'value' => function ($model, $key, $index, $widget) {
-                            return "<font  color='FF9C33'>" . $model['SUB_FUND'] . "</font>"; 
-                    }, 
-                       'pageSummary'=> 'รวม',
-                    ],
-                    [
-                       // 'class' => 'kartik\grid\EditableColumn',
-                        'attribute' => 'AMOUNT',
-                        'label'=>'จำนวน(ราย)',
-                        'format'=>'raw',
-                        'headerOptions'=>[ 'style'=>'background-color:#85C1E9'],
-                        'pageSummary' => true,
-                    ],//FF9C33  42E908  
-                     [
-                         'attribute' => 'ADJRW',
-                         'format'=>'raw',
-                         'headerOptions'=>['style'=>'background-color:#85C1E9'],
-                         'format'=>['decimal', 4],
-                         'pageSummary'=> true,
-                     ],
-                    ]
+                 <?php
+                    echo Highcharts::widget([
+                        'options' => [
+                            'title' => ['text' => 'จำนวนเคลมและค่าAdjrw ไตรมาส2'],
+                            'xAxis' => [
+                                'categories' => $name2
+                            ],
+                            'yAxis' => [
+                                'title' => ['text' => 'จำนวน(คน)']
+                            ],
+                            'series' => [
+                                [
+                                    'type' => 'column',
+                                    'name' => 'ผลรวมadjrw',
+                                    'data' =>$adjrw2,
+                                ],
+                                [
+                                    'type' => 'column',
+                                    'name' => 'จำนวน(visits)',
+                                    'data' =>$amount2,
+                                ]
+                            ]
+                        ]
                     ]);
-                      ?>
-                    </div> 
-               </div> 
-          </div>            
-   </div>  
-   <div class="col-md-6">
+                    ?>
+                </div>
+    
+                             <div>
+                                <?php
+                                //use yii\grid\GridView;
+
+                                echo GridView::widget([
+                                    'dataProvider' => $t2dataProvider,
+                                    'responsive' => true,
+                                    'hover' => true,
+                                    'panel' => [
+                                        'before' => ' ',
+                                        'after'=>'<a style="color:#ff6c00">
+                                       
+                                        </a>' 
+                                        ],
+                                        'showPageSummary' => true,
+                                    'pjax' => true,
+                                    'pjaxSettings' => [
+                                        'neverTimeout' => true,
+                                    ],
+                                    'columns' => [
+                                        ['class' => 'yii\grid\SerialColumn'],
+                                        
+                                        [
+                                            'label' => 'สิทธิการพยาบาล',
+                                            'attribute' => 'NAME',
+                                            'headerOptions'=>['style'=>'background-color:#FADBD8'],
+                                            'pageSummary'=> 'รวม',
+                                        ],
+                                        [
+                                            'label' => 'กองทุนย่อย',
+                                            'attribute' => 'SUB_FUND',
+                                            //'format' => ['decimal', 0],
+                                            'headerOptions'=>['style'=>'background-color:#FADBD8'],
+                                            //'pageSummary'=> true,
+                                        ],
+                                        
+                                        [
+                                            'label' => 'จำนวนเคลม',
+                                            'attribute' => 'AMOUNT',
+                                            'format' => ['decimal', 0],
+                                            'headerOptions'=>['style'=>'background-color:#FADBD8'],
+                                            'pageSummary'=> true,
+                                        ],
+                                        [
+                                            'label' => 'ADJRW',
+                                            'attribute' => 'ADJRW',
+                                            'headerOptions'=>['style'=>'background-color:#FADBD8'],
+                                             'format'=>['decimal', 4],
+                                             'pageSummary'=> true,
+                                        ],
+
+                                    ],
+                                ]);
+                                ?>
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
                     <div class="panel panel-info">
-                        <div class="panel-heading"><i class="glyphicon glyphicon-user"></i>รายงานข้อมูลE-Claim ผู้ป่วยใน ADJRW จากสปสช. ไตรมาส3</<i></div>
+                        <div class="panel-heading"><i class="glyphicon glyphicon-user"></i>รายงานข้อมูลE-Claim ผู้ป่วยใน ADJRW จากสปสช.ไตรมาส3</<i></div>
                         <div class="panel-body"> 
-                            <div>     
-<?php
-echo GridView::widget([
-        'dataProvider' => $dataProvider3,
-        'filterModel' => $searchModel,
-        'panel' => [
-            'before'=>'<a>รายงานข้อมูลE-Claim ผู้ป่วยใน ADJRW จากสปสช.  ประจำเดือน</a> '.date('Y-m'),
-            'after'=>'<>ประมวลผลปีงบประมาณ2563 จาก 1 มิถุนายน 2563  ถึง  30 กันยายน 2563</a>',
-            ],
-            'showPageSummary' => true,
-            'columns' => [
-                   // ['class' => 'yii\grid\SerialColumn'],
-                    ['class' => 'kartik\grid\SerialColumn'],
-                //     [
-                //         'attribute' => 'HCODE',
-                //         'label'=>'รหัส รพ.',
-                //         'headerOptions'=>[ 'style'=>'background-color:#FADBD8'] ,
-                //        'format'=>'raw',
-                //        'value' => function ($model, $key, $index, $widget) {
-                //         return "<font  color='2E86C1'>" . $model['HCODE'] . "</font>"; 
-                // },       
-                   // ],
-                    [
-                        'attribute' => 'NAME',
-                        'label'=>'สิทธิการพยาบาล',
-                       'headerOptions'=>[ 'style'=>'background-color:#FADBD8'] ,
-                       
-                    ],
-                    
-                    [
-                        'attribute' => 'MAININSCL',
-                        'label'=>'รหัสสิทธิ์',
-                    'headerOptions'=>[ 'style'=>'background-color:#FADBD8'] ,
-                    ],
-                    [
-                        'attribute' => 'SUB_FUND',
-                        'label'=>'กองทุนย่อย',
-                       'headerOptions'=>[ 'style'=>'background-color:#FADBD8'] ,
-                       'format'=>'raw',
-                        'value' => function ($model, $key, $index, $widget) {
-                            return "<font  color='FF9C33'>" . $model['SUB_FUND'] . "</font>"; 
-                    }, 
-                       'pageSummary'=> 'รวม',
-                    ],
-                    [
-                       // 'class' => 'kartik\grid\EditableColumn',
-                        'attribute' => 'AMOUNT',
-                        'label'=>'จำนวน(ราย)',
-                        'format'=>'raw',
-                        'headerOptions'=>[ 'style'=>'background-color:#FADBD8'],
-                        'pageSummary' => true,
-                    ],//FF9C33  42E908  
-                     [
-                         'attribute' => 'ADJRW',
-                         'format'=>'raw',
-                         'headerOptions'=>['style'=>'background-color:#FADBD8'],
-                         'format'=>['decimal', 4],
-                         'pageSummary'=> true,
-                     ],
-                    ]
+                            <div>   
+                 <?php
+                    echo Highcharts::widget([
+                        'options' => [
+                            'title' => ['text' => 'จำนวนเคลมและค่าAdjrw ไตรมาส2'],
+                            'xAxis' => [
+                                'categories' => $name3
+                            ],
+                            'yAxis' => [
+                                'title' => ['text' => 'จำนวน(คน)']
+                            ],
+                            'series' => [
+                                [
+                                    'type' => 'column',
+                                    'name' => 'ผลรวมadjrw',
+                                    'data' =>$adjrw3,
+                                ],
+                                [
+                                    'type' => 'column',
+                                    'name' => 'จำนวน(visits)',
+                                    'data' =>$amount3,
+                                ]
+                            ]
+                        ]
                     ]);
-                      ?>
-                    </div> 
-             </div>  
-     </div>
+                    ?>
+                </div>
+    
+                             <div>
+                                <?php
+                                //use yii\grid\GridView;
+
+                                echo GridView::widget([
+                                    'dataProvider' => $t3dataProvider,
+                                    'responsive' => true,
+                                    'hover' => true,
+                                    'panel' => [
+                                        'before' => ' ',
+                                        'after'=>'<a style="color:#ff6c00">
+                                       
+                                        </a>' 
+                                        ],
+                                        'showPageSummary' => true,
+                                    'pjax' => true,
+                                    'pjaxSettings' => [
+                                        'neverTimeout' => true,
+                                    ],
+                                    'columns' => [
+                                        ['class' => 'yii\grid\SerialColumn'],
+                                        
+                                        [
+                                            'label' => 'สิทธิการพยาบาล',
+                                            'attribute' => 'NAME',
+                                            'headerOptions'=>['style'=>'background-color:#FADBD8'],
+                                            'pageSummary'=> 'รวม',
+                                        ],
+                                        [
+                                            'label' => 'กองทุนย่อย',
+                                            'attribute' => 'SUB_FUND',
+                                            //'format' => ['decimal', 0],
+                                            'headerOptions'=>['style'=>'background-color:#FADBD8'],
+                                            //'pageSummary'=> true,
+                                        ],
+                                        
+                                        [
+                                            'label' => 'จำนวนเคลม',
+                                            'attribute' => 'AMOUNT',
+                                            'format' => ['decimal', 0],
+                                            'headerOptions'=>['style'=>'background-color:#FADBD8'],
+                                            'pageSummary'=> true,
+                                        ],
+                                        [
+                                            'label' => 'ADJRW',
+                                            'attribute' => 'ADJRW',
+                                            'headerOptions'=>['style'=>'background-color:#FADBD8'],
+                                             'format'=>['decimal', 4],
+                                             'pageSummary'=> true,
+                                        ],
+
+                                    ],
+                                ]);
+                                ?>
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
      <input class="btn btn-primary" name="btnButton" type="button" value="Print Results" onClick="JavaScript:window.print();">
                     
                   
