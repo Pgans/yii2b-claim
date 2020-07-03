@@ -65,7 +65,7 @@ $this->title = 'ไตรมาส1';
                                         'neverTimeout' => true,
                                     ],
                                     'columns' => [
-                                        ['class' => 'yii\grid\SerialColumn'],
+                                        ['class' => 'kartik\grid\SerialColumn'],
                                         
                                         [
                                             'label' => 'สิทธิการพยาบาล',
@@ -140,7 +140,7 @@ $this->title = 'ไตรมาส1';
     
                              <div>
                                 <?php
-                                //use yii\grid\GridView;
+                               // use kartik\grid\GridView;
 
                                 echo GridView::widget([
                                     'dataProvider' => $t2dataProvider,
@@ -158,15 +158,18 @@ $this->title = 'ไตรมาส1';
                                         'neverTimeout' => true,
                                     ],
                                     'columns' => [
-                                        ['class' => 'yii\grid\SerialColumn'],
+                                       // ['class' => 'yii\grid\SerialColumn'],
+                                       ['class' => 'kartik\grid\SerialColumn'],
                                         
                                         [
+                                            'class'=>'kartik\grid\FormulaColumn',
                                             'label' => 'สิทธิการพยาบาล',
                                             'attribute' => 'NAME',
                                             'headerOptions'=>['style'=>'background-color:#FADBD8'],
                                             'pageSummary'=> 'รวม',
                                         ],
                                         [
+                                            'class'=>'kartik\grid\FormulaColumn',
                                             'label' => 'กองทุนย่อย',
                                             'attribute' => 'SUB_FUND',
                                             //'format' => ['decimal', 0],
@@ -175,6 +178,7 @@ $this->title = 'ไตรมาส1';
                                         ],
                                         
                                         [
+                                            'class'=>'kartik\grid\FormulaColumn',
                                             'label' => 'จำนวนเคลม',
                                             'attribute' => 'AMOUNT',
                                             'format' => ['decimal', 0],
@@ -182,6 +186,7 @@ $this->title = 'ไตรมาส1';
                                             'pageSummary'=> true,
                                         ],
                                         [
+                                            'class'=>'kartik\grid\FormulaColumn',
                                             'label' => 'ADJRW',
                                             'attribute' => 'ADJRW',
                                             'headerOptions'=>['style'=>'background-color:#FADBD8'],
@@ -251,7 +256,8 @@ $this->title = 'ไตรมาส1';
                                         'neverTimeout' => true,
                                     ],
                                     'columns' => [
-                                        ['class' => 'yii\grid\SerialColumn'],
+                                       // ['class' => 'yii\grid\SerialColumn'],
+                                       ['class' => 'kartik\grid\SerialColumn'],
                                         
                                         [
                                             'label' => 'สิทธิการพยาบาล',

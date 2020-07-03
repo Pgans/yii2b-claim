@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use yii\helpers\Url;
 use kartik\editable\Editable;
+use \miloschuman\highcharts\Highcharts;
 
 
 
@@ -88,4 +89,6 @@ echo GridView::widget([
                        <input class="btn btn-primary" name="btnButton" type="button" value="Print Results" onClick="JavaScript:window.print();">
                     </div>
                     
+                 
+
                    

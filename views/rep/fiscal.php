@@ -65,14 +65,16 @@ $this->title = 'ปีงบ';
                                         'neverTimeout' => true,
                                     ],
                                     'columns' => [
-                                        ['class' => 'yii\grid\SerialColumn'],
+                                        ['class' => 'kartik\grid\SerialColumn'],
                                         [
+                                            'class'=>'kartik\grid\FormulaColumn',
                                             'label' => 'ปีงบ',
                                             'attribute' => 'FISCAL',
                                             'headerOptions'=>['style'=>'background-color:#FADBD8'],
                                            
                                         ],
                                         [
+                                            'class'=>'kartik\grid\FormulaColumn',
                                             'label' => 'สิทธิการพยาบาล',
                                             'attribute' => 'SUBFUND',
                                             'headerOptions'=>['style'=>'background-color:#FADBD8'],
@@ -87,6 +89,7 @@ $this->title = 'ปีงบ';
                                         // ],
                                         
                                         [
+                                            'class'=>'kartik\grid\FormulaColumn',
                                             'label' => 'จำนวนเคลม',
                                             'attribute' => 'AMOUNT',
                                             'format' => ['decimal', 0],
@@ -94,6 +97,7 @@ $this->title = 'ปีงบ';
                                             'pageSummary'=> true,
                                         ],
                                         [
+                                            'class'=>'kartik\grid\FormulaColumn',
                                             'label' => 'ADJRW',
                                             'attribute' => 'ADJRW',
                                             'headerOptions'=>['style'=>'background-color:#FADBD8'],
@@ -164,7 +168,7 @@ $this->title = 'ปีงบ';
                                         'neverTimeout' => true,
                                     ],
                                     'columns' => [
-                                        ['class' => 'yii\grid\SerialColumn'],
+                                        ['class' => 'kartik\grid\SerialColumn'],
                                         [
                                             'label' => 'ปีงบ',
                                             'attribute' => 'FISCAL',
