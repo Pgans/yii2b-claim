@@ -9,8 +9,7 @@ use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use app\models\Lsubfund;
 use app\models\Msumsubfund;
-
-
+use kartik\select2\Select2;
 
 
 $this->title = 'rep E-Claim';
@@ -35,10 +34,10 @@ $this->title = 'rep E-Claim';
                 <input type="text"  name="rep7"  placeholder="">
                 <input type="text"  name="rep8"  placeholder="">
                 <input type="text"  name="rep9"  placeholder=""> 
-        <?php
+        <!-- <?php
         $items = ArrayHelper::map(Lsubfund::find()->all(), 'SUB_FUND', 'SUB_FUND');
         echo Html::dropDownList('SUB_FUND', $subfund, $items, ['prompt' => '--- กองทุนย่อย ---']);
-        ?>        
+        ?>         -->
                 
                 &nbsp;&nbsp;<button class='btn btn-danger'>ค้นหา</button>
                 <?= Html::endForm(); ?>
@@ -47,20 +46,6 @@ $this->title = 'rep E-Claim';
         </div>
     </div>
 </div>
-<!-- <p>
-    <?= Html::button('<i class="glyphicon glyphicon-plus"></i>แจ้งส่งซ่อมคอมและโสตทัศนศึกษา', ['value'=>Url::to(['rep/rep2']), 'class' => 'btn btn-success btn-lg','id'=>'modalButton']); ?>
-        <?= Html::a(Yii::t('app','เมื่อบันทึกระบบจะส่งเข้าไลน์ถึงผู้รับผิดชอบทันที....ขอบคุณครับ'))?>
-    </p> -->
-        <?php Modal::begin([
-        'id' => 'modal',
-        'header' => '<h4><a color-blue>CREATE JOBCOM</a></h4>',
-        'size'=>'modal-lg',
-        'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">ปิด</a>',
-        ]);
-        echo "<div id='modalContent'></div>";
-        Modal::end();
-        ?>
-    <?php Pjax::begin(); ?>
 <?php
 echo GridView::widget([
         'dataProvider' => $dataProvider,
@@ -75,76 +60,45 @@ echo GridView::widget([
                     ['class' => 'kartik\grid\SerialColumn'],
                     [
                         //'class' => 'kartik\grid\EditableColumn',
-                        'attribute' => 'REP',
+                        'attribute' => 'rep',
                         'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
                        // 'label'=>'REP',611100035
                        'format'=>'raw',
                        'value' => function ($model, $key, $index, $widget) {
-                        return "<font  color='2E86C1'>" . $model['REP'] . "</font>"; 
+                        return "<font  color='2E86C1'>" . $model['rep'] . "</font>"; 
                 },       
-                    ],
-                    [
-                        'attribute' => 'HN',
-                       'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
-                       
                     ],
                     
                     [
-                        'attribute' => 'DATEADM',
-                        'label'=>'วันที่รับบริการ',
-                    'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
-                    ],
-                    [
-                        'attribute' => 'FULLNAME',
-                        'label'=>'ชื่อ-สกุล',
-                        'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
-                        'format'=>'raw',
-                        'value' => function ($model, $key, $index, $widget) {
-                            return "<font  color='2E86C1'>" . $model['FULLNAME'] . "</font>"; 
-                    }, 
-                    ],
-                    [
-                        'attribute' => 'SUB_FUND',
+                        'attribute' => 'sub_fund',
                         'label'=>'กองทุนย่อย',
                        'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
                        'format'=>'raw',
                         'value' => function ($model, $key, $index, $widget) {
-                            return "<font  color='FF9C33'>" . $model['SUB_FUND'] . "</font>"; 
+                            return "<font  color='FF9C33'>" . $model['sub_fund'] . "</font>"; 
                     }, 
                        'pageSummary'=> 'รวม',
                     ],
                     [
-                       // 'class' => 'kartik\grid\EditableColumn',
-                        'attribute' => 'SUMS_SERVICEITEM',
-                        'label'=>'เรียกเก็บ',
-                        'format'=>'raw',
-                       // 'value' => function ($model, $key, $index, $widget) {
-                          //  return "<font  color='FF9C33'>" . $model['SUMS_SERVICEITEM'] . "</font>"; 
-                   // }, 
-                        'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
-                        'pageSummary' => true,
-                    ],//FF9C33  42E908  
-                    [
-                        'attribute' => 'TOTL_AMT',
-                        'label'=>'ชดเชย',
+                        'attribute' => 'amount',
+                        'label'=>'จำนวน',
                     'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
+                    'format'=> 'raw',
+                    'value' => function($model) {
+                        $subfund = $model['sub_fund'];
+                        $amount = $model['amount'];
+                        return Html::a(Html::encode($amount), ['rep/rep_list','subfund' => $subfund],['target'=>'_blank']);
+                    },
                     'pageSummary'=> true,
-                    ],
-                    [
-                        'attribute' => 'ACT_AMT',
-                        'label'=>'ชดเชย2',
-                    'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
-                    'pageSummary'=> true,
-                    'format' => ['decimal',2] 
                     ],
                     ]
                     ]);
                     
                       ?>
-                       <?php Pjax::end() ?> 
+                       
              <input class="btn btn-primary" name="btnButton" type="button" value="Print Results" onClick="JavaScript:window.print();">
-              <?php echo Html::a('ส่งการเงิน', ['rep/rep2'], ['class' => 'btn btn-success', 'style' => 'margin-left:5px','target'=>'_blank']); ?>
-              <?php echo Html::a('ผลงานเคลม', ['rep/rep3'], ['class' => 'btn btn-info', 'style' => 'margin-left:5px','target'=>'_blank']); ?>  
+              <!-- <?php echo Html::a('ส่งการเงิน', ['rep/rep2'], ['class' => 'btn btn-success', 'style' => 'margin-left:5px','target'=>'_blank']); ?>
+              <?php echo Html::a('ผลงานเคลม', ['rep/rep3'], ['class' => 'btn btn-info', 'style' => 'margin-left:5px','target'=>'_blank']); ?>   -->
             
               </div>
             </div>

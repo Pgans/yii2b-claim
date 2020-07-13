@@ -12,9 +12,13 @@ class RepController extends \yii\web\Controller
     {
         return $this->render('index');
     }
-	 public function actionRep(){
-        $rep= Yii::$app->session['REP'];
+    public function actionRep1(){
+
         $data = Yii::$app->request->post();
+        $rep= Yii::$app->session['REP'];
+        $subfund = isset($data['SUB_FUND']) ? $data['SUB_FUND'] : 'null';
+        # $sex = isset($data['sex']) ? $data['sex'] : '1,2';
+
             $rep1 = isset($data['rep1']) ? $data['rep1'] : '';
             $rep2 = isset($data['rep2']) ? $data['rep2'] : '';
             $rep3 = isset($data['rep3']) ? $data['rep3'] : '';
@@ -24,15 +28,20 @@ class RepController extends \yii\web\Controller
             $rep7 = isset($data['rep7']) ? $data['rep7'] : '';
             $rep8 = isset($data['rep8']) ? $data['rep8'] : '';
             $rep9 = isset($data['rep9']) ? $data['rep9'] : '';
+           // $idsubfund = isset($data['rep1']) ? $data['rep1'] : '';
             //$date2 = isset($data['date2']) ? $data['date2'] : '';
         
-        $sql = "SELECT r.REP, r.HN, r.PID, r.DATEADM ,CONCAT(SUBSTR(r.TITLES,2),'',r.FNAME,' ',r.LNAME) AS FULLNAME, r.MAININSCL,
-        REPLACE(r.SUMS_SERVICEITEM,',','') as SUMS_SERVICEITEM,s.SUB_FUND,s.TOTL_AMT
-        FROM m_registerdata r
-        INNER JOIN m_sum_subfund s ON r.tran_id = s.tran_id  AND s.SUB_FUND NOT IN ('OP_HMAIN' , 'OPAE-DRUG')
-
-        WHERE (r.REP = '$rep1' OR r.REP = '$rep2' OR r.REP = '$rep3' OR r.REP = '$rep3'OR r.REP = '$rep4'
-        OR r.REP = '$rep5'OR r.REP = '$rep6' OR r.REP = '$rep7' OR r.REP = '$rep8' OR r.REP = '$rep9') ";
+        $sql = "SELECT k.rep , k.sub_fund, count(k.rep) as amount
+        FROM (
+        SELECT DISTINCT r.REP, r.HN, r.PID, r.DATEADM ,CONCAT(SUBSTR(r.TITLES,2),'',r.FNAME,' ',r.LNAME) AS FULLNAME, r.MAININSCL,
+                REPLACE(r.SUMS_SERVICEITEM,',','') as SUMS_SERVICEITEM,s.SUB_FUND,s.TOTL_AMT, s.ACT_AMT
+                FROM m_registerdata r
+                INNER JOIN m_sum_subfund s ON r.tran_id = s.tran_id  
+                WHERE (r.REP = '$rep1' OR r.REP = '$rep2' OR r.REP = '$rep3' OR r.REP = '$rep3'OR r.REP = '$rep4'
+                OR r.REP = '$rep5'OR r.REP = '$rep6' OR r.REP = '$rep7' OR r.REP = '$rep8' OR r.REP = '$rep9' ) ) as k
+        GROUP BY k.sub_fund
+                
+         ";
         $rawData = \yii::$app->db->createCommand($sql)->queryAll();
        try {
            $rawData = \Yii::$app->db->createCommand($sql)->queryAll();
@@ -48,23 +57,16 @@ class RepController extends \yii\web\Controller
        Yii::$app->session['rep7']=$rep7;
        Yii::$app->session['rep8']=$rep8;
        Yii::$app->session['rep9']=$rep9;
+       Yii::$app->session['subfund']=$subfund;
+       
        $dataProvider = new \yii\data\ArrayDataProvider([
            'allModels' => $rawData,
            'pagination' => [
             'pageSize' => 200,
             ],
        ]);
-       $dataProvider->sort->attributes['DATEADM'] = [
-        'asc' => ['DATEADM' => SORT_ASC],
-        'desc'=>['DATEADM' => SORT_DESC],
-        //'label' => 'วันมารับบริการ'
-    ];
-    $dataProvider->sort->attributes['HN'] = [
-        'asc' => ['HN' => SORT_ASC],
-        'desc'=>['HN' => SORT_DESC],
-        //'label' => 'วันมารับบริการ'
-    ];
-       return $this->render('rep', [
+    
+       return $this->render('rep1', [
                    'searchModel' => $searchModel,
                    'dataProvider' => $dataProvider,
                    'sql'=>$sql,
@@ -76,9 +78,149 @@ class RepController extends \yii\web\Controller
                    'rep6'=>$rep6,   
                    'rep7'=>$rep7,   
                    'rep8'=>$rep8,                  
-                   'rep9'=>$rep9,   
+                   'rep9'=>$rep9,
+                   'subfund'=>$subfund,
+                
        ]);   
    }
+	 public function actionRep(){
+
+        $data = Yii::$app->request->post();
+        $rep= Yii::$app->session['REP'];
+        $subfund = isset($data['SUB_FUND']) ? $data['SUB_FUND'] : 'null';
+        # $sex = isset($data['sex']) ? $data['sex'] : '1,2';
+
+            $rep1 = isset($data['rep1']) ? $data['rep1'] : '';
+            $rep2 = isset($data['rep2']) ? $data['rep2'] : '';
+            $rep3 = isset($data['rep3']) ? $data['rep3'] : '';
+            $rep4 = isset($data['rep4']) ? $data['rep4'] : '';
+            $rep5 = isset($data['rep5']) ? $data['rep5'] : '';
+            $rep6 = isset($data['rep6']) ? $data['rep6'] : '';
+            $rep7 = isset($data['rep7']) ? $data['rep7'] : '';
+            $rep8 = isset($data['rep8']) ? $data['rep8'] : '';
+            $rep9 = isset($data['rep9']) ? $data['rep9'] : '';
+           // $idsubfund = isset($data['rep1']) ? $data['rep1'] : '';
+            //$date2 = isset($data['date2']) ? $data['date2'] : '';
+        
+        $sql = "SELECT DISTINCT r.REP, r.HN, r.PID, r.DATEADM ,CONCAT(SUBSTR(r.TITLES,2),'',r.FNAME,' ',r.LNAME) AS FULLNAME, r.MAININSCL,
+        REPLACE(r.SUMS_SERVICEITEM,',','') as SUMS_SERVICEITEM,s.SUB_FUND,s.TOTL_AMT, s.ACT_AMT
+        FROM m_registerdata r
+        INNER JOIN m_sum_subfund s ON r.tran_id = s.tran_id  AND s.SUB_FUND = '$subfund'
+        WHERE (r.REP = '$rep1' OR r.REP = '$rep2' OR r.REP = '$rep3' OR r.REP = '$rep3'OR r.REP = '$rep4'
+        OR r.REP = '$rep5'OR r.REP = '$rep6' OR r.REP = '$rep7' OR r.REP = '$rep8' OR r.REP = '$rep9' ) 
+         ";
+        $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+       try {
+           $rawData = \Yii::$app->db->createCommand($sql)->queryAll();
+       } catch (\yii\db2\Exception $e) {
+           throw new \yii\web\ConflictHttpException('sql error');
+       }
+       Yii::$app->session['rep1']=$rep1;
+       Yii::$app->session['rep2']=$rep2;
+       Yii::$app->session['rep3']=$rep3;
+       Yii::$app->session['rep4']=$rep4;
+       Yii::$app->session['rep5']=$rep5;
+       Yii::$app->session['rep6']=$rep6;
+       Yii::$app->session['rep7']=$rep7;
+       Yii::$app->session['rep8']=$rep8;
+       Yii::$app->session['rep9']=$rep9;
+       Yii::$app->session['subfund']=$subfund;
+       
+       $dataProvider = new \yii\data\ArrayDataProvider([
+           'allModels' => $rawData,
+           'pagination' => [
+            'pageSize' => 200,
+            ],
+       ]);
+    //    $dataProvider->sort->attributes['DATEADM'] = [
+    //     'asc' => ['DATEADM' => SORT_ASC],
+    //     'desc'=>['DATEADM' => SORT_DESC],
+    //     //'label' => 'วันมารับบริการ'
+    // ];
+    // $dataProvider->sort->attributes['HN'] = [
+    //     'asc' => ['HN' => SORT_ASC],
+    //     'desc'=>['HN' => SORT_DESC],
+    //     //'label' => 'วันมารับบริการ'
+    // ];
+       return $this->render('rep', [
+                   'searchModel' => $searchModel,
+                   'dataProvider' => $dataProvider,
+                   'subfund'=>$subfund,
+                   'sql'=>$sql,
+                   'rep1'=>$rep1,
+                   'rep2'=>$rep2,
+                   'rep3'=>$rep3,   
+                   'rep4'=>$rep4,   
+                   'rep5'=>$rep5,   
+                   'rep6'=>$rep6,   
+                   'rep7'=>$rep7,   
+                   'rep8'=>$rep8,                  
+                   'rep9'=>$rep9,
+                   'subfund'=>$subfund,
+
+
+       ]);   
+   }
+   public function actionRep_list($subfund){
+        $rep1 = Yii::$app->session['rep1'];
+        $rep2 = Yii::$app->session['rep2'];
+        $rep3 = Yii::$app->session['rep3'];
+        $rep4 = Yii::$app->session['rep4'];
+        $rep5 = Yii::$app->session['rep5'];
+        $rep6 = Yii::$app->session['rep6'];
+        $rep7 = Yii::$app->session['rep7'];
+        $rep8 = Yii::$app->session['rep8'];
+        $rep9 = Yii::$app->session['rep9'];
+       
+    $sql = "SELECT DISTINCT r.REP, r.HN, r.PID, r.DATEADM ,CONCAT(SUBSTR(r.TITLES,2),'',r.FNAME,' ',r.LNAME) AS FULLNAME, r.MAININSCL,
+    REPLACE(r.SUMS_SERVICEITEM,',','') as SUMS_SERVICEITEM,s.SUB_FUND,s.TOTL_AMT, s.ACT_AMT
+    FROM m_registerdata r
+    INNER JOIN m_sum_subfund s ON r.tran_id = s.tran_id  AND s.SUB_FUND = '$subfund'
+    WHERE (r.REP = '$rep1' OR r.REP = '$rep2' OR r.REP = '$rep3' OR r.REP = '$rep3'OR r.REP = '$rep4'
+    OR r.REP = '$rep5'OR r.REP = '$rep6' OR r.REP = '$rep7' OR r.REP = '$rep8' OR r.REP = '$rep9' ) 
+     ";
+    $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+   try {
+       $rawData = \Yii::$app->db->createCommand($sql)->queryAll();
+   } catch (\yii\db2\Exception $e) {
+       throw new \yii\web\ConflictHttpException('sql error');
+   }
+   Yii::$app->session['rep1']=$rep1;
+   Yii::$app->session['rep2']=$rep2;
+   Yii::$app->session['rep3']=$rep3;
+   Yii::$app->session['rep4']=$rep4;
+   Yii::$app->session['rep5']=$rep5;
+   Yii::$app->session['rep6']=$rep6;
+   Yii::$app->session['rep7']=$rep7;
+   Yii::$app->session['rep8']=$rep8;
+   Yii::$app->session['rep9']=$rep9;
+   Yii::$app->session['subfund']=$subfund;
+   
+   $dataProvider = new \yii\data\ArrayDataProvider([
+       'allModels' => $rawData,
+       'pagination' => [
+        'pageSize' => 200,
+        ],
+   ]);
+   return $this->render('rep_list', [
+               'searchModel' => $searchModel,
+               'dataProvider' => $dataProvider,
+               'subfund'=>$subfund,
+               'sql'=>$sql,
+               'rep1'=>$rep1,
+               'rep2'=>$rep2,
+               'rep3'=>$rep3,   
+               'rep4'=>$rep4,   
+               'rep5'=>$rep5,   
+               'rep6'=>$rep6,   
+               'rep7'=>$rep7,   
+               'rep8'=>$rep8,                  
+               'rep9'=>$rep9,
+               'subfund'=>$subfund,
+
+
+   ]);   
+}
    public function actionRep2(){
     $rep1= Yii::$app->session['rep1'];
     $rep2= Yii::$app->session['rep2'];
@@ -89,10 +231,11 @@ class RepController extends \yii\web\Controller
     $rep7= Yii::$app->session['rep7'];
     $rep8= Yii::$app->session['rep8'];
     $rep9= Yii::$app->session['rep9'];
+    $subfund= Yii::$app->session['subfund'];
     $sql = "SELECT r.REP, r.HN, r.PID, r.DATEADM ,CONCAT(SUBSTR(r.TITLES,2),'',r.FNAME,' ',r.LNAME) AS FULLNAME, r.MAININSCL,
     REPLACE(r.SUMS_SERVICEITEM,',','') as SUMS_SERVICEITEM,s.SUB_FUND,s.TOTL_AMT
     FROM m_registerdata r
-    INNER JOIN m_sum_subfund s ON r.tran_id = s.tran_id AND s.SUB_FUND NOT IN ('OP_HMAIN' , 'OPAE-DRUG')
+    INNER JOIN m_sum_subfund s ON r.tran_id = s.tran_id AND s.SUB_FUND = '$subfund'
 
     WHERE (r.REP = '$rep1' OR r.REP = '$rep2' OR r.REP = '$rep3' OR r.REP = '$rep3'OR r.REP = '$rep4'
     OR r.REP = '$rep5'OR r.REP = '$rep6' OR r.REP = '$rep7' OR r.REP = '$rep8' OR r.REP = '$rep9') ";
@@ -108,22 +251,74 @@ class RepController extends \yii\web\Controller
         'pageSize' => 200,
         ],
    ]);
-   $dataProvider->sort->attributes['DATEADM'] = [
-    'asc' => ['DATEADM' => SORT_ASC],
-    'desc'=>['DATEADM' => SORT_DESC],
-    //'label' => 'วันมารับบริการ'
-];
-$dataProvider->sort->attributes['HN'] = [
-    'asc' => ['HN' => SORT_ASC],
-    'desc'=>['HN' => SORT_DESC],
-    //'label' => 'วันมารับบริการ'
-];
-$dataProvider->sort->attributes['SUB_FUND'] = [
-    'asc' => ['SUB_FUND' => SORT_ASC],
-    'desc'=>['SUB_FUND' => SORT_DESC],
-    //'label' => 'วันมารับบริการ'
-];
+//    $dataProvider->sort->attributes['DATEADM'] = [
+//     'asc' => ['DATEADM' => SORT_ASC],
+//     'desc'=>['DATEADM' => SORT_DESC],
+//     //'label' => 'วันมารับบริการ'
+// ];
+// $dataProvider->sort->attributes['HN'] = [
+//     'asc' => ['HN' => SORT_ASC],
+//     'desc'=>['HN' => SORT_DESC],
+//     //'label' => 'วันมารับบริการ'
+// ];
+// $dataProvider->sort->attributes['SUB_FUND'] = [
+//     'asc' => ['SUB_FUND' => SORT_ASC],
+//     'desc'=>['SUB_FUND' => SORT_DESC],
+//     //'label' => 'วันมารับบริการ'
+// ];
    return $this->render('rep2', [
+               'searchModel' => $searchModel,
+               'dataProvider' => $dataProvider,
+               'sql'=>$sql,
+                          
+   ]);   
+}
+public function actionRep3(){
+    $rep1= Yii::$app->session['rep1'];
+    $rep2= Yii::$app->session['rep2'];
+    $rep3= Yii::$app->session['rep3'];
+    $rep4= Yii::$app->session['rep4'];
+    $rep5= Yii::$app->session['rep5'];
+    $rep6= Yii::$app->session['rep6'];
+    $rep7= Yii::$app->session['rep7'];
+    $rep8= Yii::$app->session['rep8'];
+    $rep9= Yii::$app->session['rep9'];
+    $subfund= Yii::$app->session['subfund'];
+    $sql = "SELECT r.REP, r.HN, r.PID, r.DATEADM ,CONCAT(SUBSTR(r.TITLES,2),'',r.FNAME,' ',r.LNAME) AS FULLNAME, r.MAININSCL,
+    REPLACE(r.SUMS_SERVICEITEM,',','') as SUMS_SERVICEITEM,s.SUB_FUND,s.TOTL_AMT, s.ACT_AMT
+    FROM m_registerdata r
+    INNER JOIN m_sum_subfund s ON r.tran_id = s.tran_id AND s.SUB_FUND = '$subfund'
+
+    WHERE (r.REP = '$rep1' OR r.REP = '$rep2' OR r.REP = '$rep3' OR r.REP = '$rep3'OR r.REP = '$rep4'
+    OR r.REP = '$rep5'OR r.REP = '$rep6' OR r.REP = '$rep7' OR r.REP = '$rep8' OR r.REP = '$rep9') ";
+    $rawData = \yii::$app->db->createCommand($sql)->queryAll();
+   try {
+       $rawData = \Yii::$app->db->createCommand($sql)->queryAll();
+   } catch (\yii\db2\Exception $e) {
+       throw new \yii\web\ConflictHttpException('sql error');
+   }
+   $dataProvider = new \yii\data\ArrayDataProvider([
+       'allModels' => $rawData,
+       'pagination' => [
+        'pageSize' => 200,
+        ],
+   ]);
+//    $dataProvider->sort->attributes['DATEADM'] = [
+//     'asc' => ['DATEADM' => SORT_ASC],
+//     'desc'=>['DATEADM' => SORT_DESC],
+//     //'label' => 'วันมารับบริการ'
+// ];
+// $dataProvider->sort->attributes['HN'] = [
+//     'asc' => ['HN' => SORT_ASC],
+//     'desc'=>['HN' => SORT_DESC],
+//     //'label' => 'วันมารับบริการ'
+// ];
+// $dataProvider->sort->attributes['SUB_FUND'] = [
+//     'asc' => ['SUB_FUND' => SORT_ASC],
+//     'desc'=>['SUB_FUND' => SORT_DESC],
+//     //'label' => 'วันมารับบริการ'
+// ];
+   return $this->render('rep3', [
                'searchModel' => $searchModel,
                'dataProvider' => $dataProvider,
                'sql'=>$sql,

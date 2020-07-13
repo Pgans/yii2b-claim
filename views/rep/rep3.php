@@ -29,7 +29,7 @@ echo GridView::widget([
                     [
                         //'class' => 'kartik\grid\EditableColumn',
                         'attribute' => 'REP',
-                        'headerOptions'=>[ 'style'=>'background-color:#a4e7df'] ,
+                        'headerOptions'=>[ 'style'=>'background-color:#DAF7A6'] ,
                        // 'label'=>'REP',611100035
                        'format'=>'raw',
                        'value' => function ($model, $key, $index, $widget) {
@@ -38,19 +38,19 @@ echo GridView::widget([
                     ],
                     [
                         'attribute' => 'HN',
-                       'headerOptions'=>[ 'style'=>'background-color:#a4e7df'] ,
+                       'headerOptions'=>[ 'style'=>'background-color:#DAF7A6'] ,
                        
                     ],
                     
                     [
                         'attribute' => 'DATEADM',
                         'label'=>'วันที่รับบริการ',
-                    'headerOptions'=>[ 'style'=>'background-color:#a4e7df'] ,
+                    'headerOptions'=>[ 'style'=>'background-color:#DAF7A6'] ,
                     ],
                     [
                         'attribute' => 'FULLNAME',
                         'label'=>'ชื่อ-สกุล',
-                        'headerOptions'=>[ 'style'=>'background-color:#a4e7df'] ,
+                        'headerOptions'=>[ 'style'=>'background-color:#DAF7A6'] ,
                         'format'=>'raw',
                         'value' => function ($model, $key, $index, $widget) {
                             return "<font  color='2E86C1'>" . $model['FULLNAME'] . "</font>"; 
@@ -59,7 +59,7 @@ echo GridView::widget([
                     [
                         'attribute' => 'SUB_FUND',
                         'label'=>'กองทุนย่อย',
-                       'headerOptions'=>[ 'style'=>'background-color:#a4e7df'] ,
+                       'headerOptions'=>[ 'style'=>'background-color:#DAF7A6'] ,
                        'format'=>'raw',
                         'value' => function ($model, $key, $index, $widget) {
                             return "<font  color='FF9C33'>" . $model['SUB_FUND'] . "</font>"; 
@@ -74,25 +74,26 @@ echo GridView::widget([
                        // 'value' => function ($model, $key, $index, $widget) {
                           //  return "<font  color='FF9C33'>" . $model['SUMS_SERVICEITEM'] . "</font>"; 
                    // }, 
-                        'headerOptions'=>[ 'style'=>'background-color:#a4e7df'] ,
+                        'headerOptions'=>[ 'style'=>'background-color:#DAF7A6'] ,
                         'pageSummary' => true,
                         'format'=>['decimal',0]
                     ],//FF9C33  42E908  
-                    // [
-                    //     'attribute' => 'TOTL_AMT',
-                    //     'label'=>'ชดเชย',
-                    // 'headerOptions'=>[ 'style'=>'background-color:#a4e7df'] ,
-                    // 'pageSummary'=> true,
-                    // ],
-                    // [
-                    //     'attribute' => 'ACT_AMT',
-                    //     'label'=>'ชดเชย2',
-                    // 'headerOptions'=>[ 'style'=>'background-color:#8d8de3'] ,
-                    // 'pageSummary'=> true,
-                    // ],
+                    [
+                        'attribute' => 'TOTL_AMT',
+                        'label'=>'ชดเชย',
+                    'headerOptions'=>[ 'style'=>'background-color:#DAF7A6'] ,
+                    'pageSummary'=> true,
+                    'format'=>['decimal',0]
+                    ],
+                    [
+                        'attribute' => 'ACT_AMT',
+                        'label'=>'ชดเชย2',
+                    'headerOptions'=>[ 'style'=>'background-color:#DAF7A6'] ,
+                    'pageSummary'=> true,
+                    'format'=>['decimal',0]
+                    ],
                     ]
                     ]);
-                    
                       ?>
                        <?php
                 echo '<p align = "center">....................................</p> ';
